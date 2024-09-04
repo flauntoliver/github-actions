@@ -1,12 +1,11 @@
 name: CI/CD
 
-# Trigger the workflow on push to the main branch and allow manual trigger
 on:
   push:
     branches:
       - main
-  workflow_dispatch:  # Allows manual trigger from the GitHub Actions page
-
+  workflow_dispatch:
+  
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -28,7 +27,13 @@ jobs:
 
     - name: Build the application
       run: npm run build
-
+      
+    - name: List all files and folders
+      run: |
+        echo "Listing all directories and files:"
+        find . -type d  # List all directories
+        find . -type f  # List all files
+        
   deploy:
     needs: build
     runs-on: ubuntu-latest
