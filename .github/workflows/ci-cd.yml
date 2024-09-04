@@ -1,23 +1,33 @@
 name: CI/CD
 
+# Trigger the workflow on push to the main branch and allow manual trigger
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
+  workflow_dispatch:  # Allows manual trigger from the GitHub Actions page
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
       with:
         node-version: 18
-    - run: npm ci
-    - run: npm run test
-    - run: npm run build
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run tests
+      run: npm run test
+
+    - name: Build the application
+      run: npm run build
 
   deploy:
     needs: build
@@ -30,7 +40,7 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v2
       with:
-        path: '/workspaces/github-actions/dist'
+        path: './dist'
 
     - name: Deploy to GitHub Pages
       uses: actions/deploy-pages@v2
