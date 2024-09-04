@@ -27,12 +27,6 @@ jobs:
 
     - name: Build the application
       run: npm run build
-      
-    - name: List all files and folders
-      run: |
-        echo "Listing all directories and files:"
-        find . -type d  # List all directories
-        find . -type f  # List all files
         
   deploy:
     needs: build
@@ -45,7 +39,7 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v2
       with:
-        path: './dist'
+        path: ${{ github.workspace }}/dist
 
     - name: Deploy to GitHub Pages
       uses: actions/deploy-pages@v2
